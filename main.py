@@ -1,16 +1,16 @@
 # Tested on MacOS, need to install chromedriver
 # brew install chromedriver
-import config, time
+import config, time, sys
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException
+from openpyxl import load_workbook
 
+# Finds element and then types
 def find(eid, txt):
     finder = wd.find_element_by_id(eid)
     finder.send_keys(txt)
     return
 
+# Finds and click
 def click(eid):
     finder = wd.find_element_by_id(eid)
     finder.click()
@@ -39,10 +39,14 @@ find("username", netid)
 find("password", netpass + "\n")
 
 # Compose email
-time.sleep(1)
-finder2 = wd.find_elements_by_xpath('.//*[@id=":3w"]/div/div[1]/span/a')[0]
-finder2.send_keys('c')
+wd.get("https://mail.google.com/mail/u/0/#inbox?compose=new")
+wd.send_keys("hello")
+# TODO: Loop through spreadsheet
+wb = load_workbook(filename = sys.argv[1])
+sheet = wb['Sheet1']
 
+for i in range(45):
+    finder2.send_keys(sheet['C' + (i + 1)].value)
 # Used for debugging
 time.sleep(1)
 wd.quit()
